@@ -1,23 +1,4 @@
-Function WaitForKeypress
-{
-    Write-Host ""
-    Write-Host "Press any key to continue ..."
-    $x = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
-}
-
-Function EchoAndExecute($cmd)
-{
-    Write-Host "---------------"
-    Write-Host "$cmd"
-    Write-Host ""
-    Invoke-Expression $cmd
-}
-
-Function WriteFile($text, $file)
-{
-    Write-Host "Writing file: $file"
-    $text >> $file
-}
+Import-Module -Name .\Demo-Module.psm1
 
 $startDir = (get-location).path
 $demoDir = $startDir + "\demo1"
@@ -34,7 +15,7 @@ pushd $demoDir
 mkdir $dev1
 mkdir $dev2
 mkdir $remote | out-null
-pushd repoA
+pushd $dev1
 git init
 
 #------------------------------------------------------------
@@ -56,7 +37,7 @@ WaitForKeypress
 cls
 
 #------------------------------------------------------------
-cd $dev2
+cd $dev1
 $x = @"
 bread
  bacon
