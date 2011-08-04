@@ -2,23 +2,44 @@ Import-Module -Name .\Demo-Module.psm1
 
 $startDir = (get-location).path
 $demoDir = $startDir + "\demo1"
-$dev1 = $demoDir + "\Repo1"
-$dev2 = $demoDir + "\Repo2"
+$dev1 = $demoDir + "\AliceRepo"
+$dev2 = $demoDir + "\BobRepo"
 $remote = $demoDir + "\RemoteRepo"
 
 cls
-# Clear out a folder for the demo.
+WriteComment('Clear out a folder for the demo, and create new folders.')
+WriteComment('Create ' + $demoDir)
+WriteComment('Create ' + $remote)
+WriteComment('Create ' + $dev1)
+WriteComment('Create ' + $dev2)
+
 rm -fo -r $demoDir
-mkdir $demoDir
+mkdir $demoDir | out-null
 pushd $demoDir
 
-mkdir $dev1
-mkdir $dev2
+mkdir $dev1 | out-null
+mkdir $dev2 | out-null
 mkdir $remote | out-null
-pushd $dev1
-git init
+
+WriteComment('Create the remote repository')
+cd $remote
+EchoAndExecute 'git init'
+echo ""
+
+WriteComment('Alice and Bob both clone the remote repo.')
+cd $dev1
+EchoAndExecute "git clone $remote"
+echo ""
+
+cd $dev2
+EchoAndExecute "git clone $remote"
+echo ""
+
+WaitForKeypress
+cls
 
 #------------------------------------------------------------
+WriteComment('Alice makes some changes and checks in.')
 cd $dev1
 $x = @"
 bread
@@ -26,7 +47,7 @@ bread
  tomato
 bread
 "@ 
-WriteFile $x 'Sandwich.txt'
+WriteFile $x ($dev1 + '\Sandwich.txt')
 
 EchoAndExecute 'git status'
 EchoAndExecute 'git add .'
