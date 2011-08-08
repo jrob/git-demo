@@ -1,6 +1,12 @@
+param($startDir)
+
+if ($startDir -eq "" -or $startDir -eq $NULL) {
+	WriteComment('A working directory is required.')
+	exit
+}
+
 Import-Module -Name .\Demo-Module.psm1
 
-$startDir = (get-location).path
 $demoDir = $startDir + "\demo1"
 $dev1 = $demoDir + "\AliceRepo"
 $dev2 = $demoDir + "\BobRepo"
